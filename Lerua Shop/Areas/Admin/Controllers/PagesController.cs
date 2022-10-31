@@ -77,5 +77,20 @@ namespace Lerua_Shop.Areas.Admin.Controllers
             return RedirectToAction("Index");
         }
 
+        // GET: Admin/Pages/Details/id
+        [HttpGet]
+        public ActionResult PageDetails(int id)
+        {
+            PageDTO page = _repository.PagesRepository.GetOne(id);
+            if (page == null)
+            {
+                return Content("The page does not exist");
+            }
+
+            PageVM model = new PageVM(page);
+            return View(model);
+        }
+
+
     }
 }
