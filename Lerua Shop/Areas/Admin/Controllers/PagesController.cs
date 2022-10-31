@@ -3,6 +3,7 @@ using Lerua_Shop.Models.ModelsDTO;
 using Lerua_Shop.Models.ViewModels.Pages;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -89,6 +90,72 @@ namespace Lerua_Shop.Areas.Admin.Controllers
 
             PageVM model = new PageVM(page);
             return View(model);
+        }
+
+        // GET: Admin/Pages/EditPage/id
+        [HttpGet]
+        public ActionResult EditPage(int id)
+        {
+            PageDTO page = _repository.PagesRepository.GetOne(id);
+            if (page == null)
+            {
+                return Content("The page does not exist");
+            }
+
+            PageVM model = new PageVM(page);
+            return View(model);
+        }
+
+        // Post: Admin/Pages/EditPage/id
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditPage(PageVM model)
+        {
+            //Check model
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            string slug = model.Slug.Replace(" ", "-").ToLower();
+
+            List<PageDTO> pagesList = _repository.PagesRepository.GetAll(filter: x => x.Title == model.Title
+                || x.Slug == slug);
+
+            //Check title 
+            if (pagesList.Where(x => x.Id != model.Id).Any(x => x.Title == model.Title))
+            {
+                ModelState.AddModelError("", "This title is already existed");
+                return View(model);
+            }
+
+            //Check slug 
+            if (pagesList.Where(x => x.Id != model.Id).Any(x => x.Slug == slug))
+            {
+                ModelState.AddModelError("", "This slug is already existed");
+                return View(model);
+            }
+
+            //Create PagesDTO       
+            PageDTO page = model.GetDTO();
+
+            try
+            {
+                _repository.PagesRepository.Edit(page);
+            }
+            catch (DbUpdateConcurrencyException ex)
+            {
+                ModelState.AddModelError(string.Empty,
+                $@"Unable to save the record. Another user has updated it.{ex.Message}");
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, $@"Unable to save the record.{ex.Message}");
+                return View(model);
+            }
+
+            TempData["AM"] = "You have edited page";
+            return RedirectToAction("EditPage");
         }
 
 
