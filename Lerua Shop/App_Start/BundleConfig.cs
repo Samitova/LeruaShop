@@ -25,9 +25,13 @@ namespace Lerua_Shop
             bundles.Add(new Bundle("~/bundles/ckeditor").Include(
                      "~/Scripts/ckeditor/ckeditor.js"));
 
+            bundles.Add(new Bundle("~/bundles/jqueryui").Include(
+                     "~/Scripts/ckeditor/jquery-ui.js"));
+
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
-                      "~/Content/site.css"));
+                      "~/Content/site.css",
+                      "~/Content/jquery-ui.css"));
         }
     }
 }

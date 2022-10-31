@@ -10,7 +10,7 @@ using System.Web.Mvc;
 
 namespace Lerua_Shop.Areas.Admin.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
     public class PagesController : Controller
     {
         private readonly GeneralRepository _repository = GeneralRepository.GetInstance();
@@ -192,7 +192,22 @@ namespace Lerua_Shop.Areas.Admin.Controllers
 
             TempData["AM"] = $"Page {model.Title} was successfuly deleted";
             return RedirectToAction("Index");
-        }        
+        }
+
+        // Post: Admin/Pages/ReorderPages
+        [HttpPost]
+        public void ReorderPages(int[] id)
+        {
+            int count = 1;
+            PageDTO page;
+            foreach (var idPage in id)
+            {
+                page = _repository.PagesRepository.GetOne(idPage);
+                page.Sorting = count;
+                _repository.PagesRepository.SaveChanges();
+                count++;
+            }
+        }
 
     }
 }
