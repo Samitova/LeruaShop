@@ -131,6 +131,7 @@
     </Compile>
     <Compile Include="Models\Base\EntityBase.cs" />
     <Compile Include="Models\Data\EF\DbStoreContext.cs" />
+    <Compile Include="Models\Data\Repository\IRepository.cs" />
     <Compile Include="Models\ModelsDTO\PageDTO.cs" />
     <Compile Include="Models\ViewModels\Pages\PageVM.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -198,7 +199,6 @@
     <Folder Include="Areas\Admin\Views\Page\" />
     <Folder Include="Areas\Admin\Views\Products\" />
     <Folder Include="Controllers\" />
-    <Folder Include="Models\Data\Repository\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.rtl.min.css.map" />
