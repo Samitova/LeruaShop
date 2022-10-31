@@ -10,7 +10,7 @@ using System.Xml.Linq;
 
 namespace Lerua_Shop.Models.ViewModels.Pages
 {
-    public class PageVM : EntityBase
+    public class PageVM : EntityBase, IGetDTO<PageDTO>
     {
         public PageVM()
         { }
@@ -38,5 +38,19 @@ namespace Lerua_Shop.Models.ViewModels.Pages
         public int Sorting { get; set; }
         [Display(Name = "Sidebar")]
         public bool HasSidebar { get; set; }
+
+        public PageDTO GetDTO()
+        {
+            PageDTO page = new PageDTO();
+            page.Id = this.Id;
+            page.Title = this.Title;
+            page.Slug = this.Slug.Replace(" ", "-").ToLower();
+            page.Body = this.Body;
+            page.Sorting = this.Sorting;
+            page.HasSidebar = this.HasSidebar;
+            page.Timestamp = this.Timestamp;
+
+            return page;
+        }
     }
 }
