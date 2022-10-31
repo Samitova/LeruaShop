@@ -135,7 +135,7 @@ namespace Lerua_Shop.Areas.Admin.Controllers
                 return View(model);
             }
 
-            //Create PagesDTO       
+            //Create PageDTO       
             PageDTO page = model.GetDTO();
 
             try
@@ -145,7 +145,7 @@ namespace Lerua_Shop.Areas.Admin.Controllers
             catch (DbUpdateConcurrencyException ex)
             {
                 ModelState.AddModelError(string.Empty,
-                $@"Unable to save the record. Another user has updated it.{ex.Message}");
+                $@"Unable to save the record. Another admin has updated it.{ex.Message}");
                 return View(model);
             }
             catch (Exception ex)
@@ -158,6 +158,41 @@ namespace Lerua_Shop.Areas.Admin.Controllers
             return RedirectToAction("EditPage");
         }
 
+        // GET: Admin/Pages/DeletePage/id
+        [HttpGet]
+        public ActionResult DeletePage(int id)
+        {
+            PageDTO page = _repository.PagesRepository.GetOne(id);
+            if (page == null)
+            {
+                return Content("The page does not exist");
+            }
+
+            PageVM model = new PageVM(page);
+            return View(model);
+        }
+
+        // Post: Admin/Pages/DeletePage/id
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeletePage(PageVM model)
+        {
+            try
+            {
+                _repository.PagesRepository.Delete(model.GetDTO());
+            }
+            catch (DbUpdateConcurrencyException ex)
+            {
+                ModelState.AddModelError(string.Empty, $@"Unable to delete record. Another admin updated the record. {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, $@"Unable to delete record:{ex.Message}");
+            }
+
+            TempData["AM"] = $"Page {model.Title} was successfuly deleted";
+            return RedirectToAction("Index");
+        }        
 
     }
 }
