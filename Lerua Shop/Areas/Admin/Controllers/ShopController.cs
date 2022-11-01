@@ -8,6 +8,8 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using PagedList;
+using System.IO;
+using System.Web.Helpers;
 
 namespace Lerua_Shop.Areas.Admin.Controllers
 {
@@ -138,11 +140,107 @@ namespace Lerua_Shop.Areas.Admin.Controllers
             var onePageOfProducts = products.ToPagedList(pageNumber, 3);
             ViewBag.onePageOfProducts = onePageOfProducts;
 
-
             return View(products);
         }
 
+        // GET: Admin/Shop/AddProduct
+        [HttpGet]
+        public ActionResult AddProduct()
+        {
+            ProductVM product = new ProductVM(new ProductDTO());
+            // initialize categories
+            product.Categories = new SelectList(_repository.CategoriesRepository.GetAll(),
+                dataValueField: "Id", dataTextField: "Name");
+            return View(product);
+        }
 
+        // POST: Admin/Shop/AddProduct
+        [HttpPost]
+        public ActionResult AddProduct(ProductVM model, HttpPostedFileBase file)
+        {
+            var categories = new SelectList(_repository.CategoriesRepository.GetAll(),
+                dataValueField: "Id", dataTextField: "Name");
+            //check model
+            if (!ModelState.IsValid)
+            {
+                model.Categories = categories;
+                return View(model);
+            }
+
+            if (_repository.ProductsRepository.Any( x => x.Name == model.Name))
+            {
+                ModelState.AddModelError("", "This product name is already existed");
+                return View(model);
+            }
+
+            if (file != null && file.ContentLength > 0)
+            {
+                string ext = file.ContentType.ToLower();
+
+                if (ext != "image/jpg" && ext != "image/jpeg" && ext != "image/pjpeg" &&
+                    ext != "image/gif" && ext != "image/x-png" && ext != "image/png")
+                {
+                    model.Categories = categories;
+                    ModelState.AddModelError("", "Bad image extention");
+                    return View(model);
+                }
+            }
+
+            // add product
+
+            ProductDTO product = model.GetDTO();
+            product.CategoryName = _repository.CategoriesRepository.GetOne(model.CategoryId)?.Name;
+            product.ImageName = file?.FileName;
+
+            try
+            {
+                _repository.ProductsRepository.Add(product);
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, $@"Unable to create record: {ex.Message}");
+                model.Categories = categories;
+                return View(model);
+            }
+
+            // create directories for image
+            var originalDirectory = new DirectoryInfo(String.Format($"{Server.MapPath(@"\")}Images\\Uploads\\Products\\"));
+
+            List<string> paths = new List<string>
+                {
+                    originalDirectory.ToString(),
+                    Path.Combine(originalDirectory.ToString(), product.Id.ToString()),
+                    Path.Combine(originalDirectory.ToString(), product.Id.ToString() + "\\Thumbs"),
+                    Path.Combine(originalDirectory.ToString(), product.Id.ToString() + "\\Gallery"),
+                    Path.Combine(originalDirectory.ToString(), product.Id.ToString() + "\\Gallery\\Thumbs")
+                };
+
+            foreach (var path in paths)
+            {
+                if (!Directory.Exists(path))
+                {
+                    Directory.CreateDirectory(path);
+                }
+            }
+
+            // save image 
+
+            if (file != null && file.ContentLength > 0)
+            {
+                var savePathFull = string.Format($"{paths[1]}\\{file.FileName}");
+                var savePathMini = string.Format($"{paths[2]}\\{file.FileName}");
+
+                file.SaveAs(savePathFull);
+                WebImage image = new WebImage(file.InputStream);
+                image.Resize(200, 200).Crop(1, 1);
+                image.Save(savePathMini);
+
+            }
+
+            TempData["AM"] = "You have added a new product";
+
+            return RedirectToAction("AddProduct");
+        }
 
     }
 }
