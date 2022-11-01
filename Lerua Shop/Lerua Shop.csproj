@@ -176,6 +176,7 @@
     <Content Include="Content\jquery-ui.structure.css" />
     <Content Include="Content\jquery-ui.theme.css" />
     <Content Include="Content\images\ajax-loader.gif" />
+    <Content Include="Content\ShopScripts\CategoryScript.js" />
     <Content Include="Content\ShopScripts\PageScripts.js" />
     <Content Include="favicon.ico" />
     <Content Include="fileman\css\images\animated-overlay.gif" />
