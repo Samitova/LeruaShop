@@ -15,9 +15,9 @@ namespace Lerua_Shop.Models.ModelsDTO
         public string Description { get; set; }
         public string Brand { get; set; }
         public string CategoryName { get; set; }
-        public int CategoryId { get; set; }
-        public decimal Price { get; set; }        
-        public int Amount { get; set; }
+        public int CategoryId { get; set; } 
+        public decimal Price { get; set; }
+        public int Amount { get; set; } = 1;
         public string ImageName { get; set; }
 
         [ForeignKey("CategoryId")]

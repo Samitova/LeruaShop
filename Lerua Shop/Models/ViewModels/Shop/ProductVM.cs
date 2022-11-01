@@ -27,7 +27,7 @@ namespace Lerua_Shop.Models.ViewModels.Shop
             Amount = product.Amount;
             ImageName = product.ImageName;
             Timestamp = product.Timestamp;
-        }
+        }       
 
         [Required]
         public string Name { get; set; }
@@ -40,10 +40,8 @@ namespace Lerua_Shop.Models.ViewModels.Shop
 
         [Required]
         [DisplayName("Category")]
-        public int CategoryId { get; set; }
-        [Required]
+        public int CategoryId { get; set; }       
         public decimal Price { get; set; }
-        [Required]
         public int Amount { get; set; }
 
         [DisplayName("Image")]

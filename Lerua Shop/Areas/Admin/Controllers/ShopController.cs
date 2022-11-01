@@ -171,8 +171,8 @@ namespace Lerua_Shop.Areas.Admin.Controllers
             {
                 ModelState.AddModelError("", "This product name is already existed");
                 return View(model);
-            }
-
+            }           
+          
             if (file != null && file.ContentLength > 0)
             {
                 string ext = file.ContentType.ToLower();
@@ -303,7 +303,6 @@ namespace Lerua_Shop.Areas.Admin.Controllers
                 imageExisted = true;
             }
 
-
             ProductDTO product = _repository.ProductsRepository.GetOne(model.Id);
             product = model.GetDTO();
             product.CategoryName = _repository.CategoriesRepository.GetOne(model.CategoryId)?.Name;
@@ -327,7 +326,6 @@ namespace Lerua_Shop.Areas.Admin.Controllers
 
             if (imageExisted)
             {
-
                 // delete existed image
                 var originalDirectory = new DirectoryInfo(String.Format($"{Server.MapPath(@"\")}Images\\Uploads\\Products\\"));
 
@@ -357,8 +355,36 @@ namespace Lerua_Shop.Areas.Admin.Controllers
 
             }
             #endregion
-
             return RedirectToAction("EditProduct");
+        }
+
+        // Post: Admin/Shop/DeleteProduct/id      
+        public ActionResult DeleteProduct(int id)
+        {
+            ProductDTO product = _repository.ProductsRepository.GetOne(id);
+            if (product == null)
+            {
+                return Content("The product does not exist");
+            }
+            try
+            {
+                _repository.ProductsRepository.Delete(product);
+            }
+            catch (DbUpdateConcurrencyException ex)
+            {
+                ModelState.AddModelError(string.Empty, $"Unable to delete product. Another admin updated the product. {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, $"Unable to delete record:{ex.Message}");
+            }
+
+            var path = new DirectoryInfo(String.Format($"{Server.MapPath(@"\")}Images\\Uploads\\Products\\{id.ToString()}")).ToString();
+            if (Directory.Exists(path))
+                Directory.Delete(path, true);
+
+            TempData["AM"] = "You have deleted the product";
+            return RedirectToAction("Products");
         }
 
     }
