@@ -387,5 +387,63 @@ namespace Lerua_Shop.Areas.Admin.Controllers
             return RedirectToAction("Products");
         }
 
+        /**************************************************************************************************/
+        //                                Product gallery image functionality                          
+        /**************************************************************************************************/
+
+        // Post: Admin/Shop/SaveGalleryImages/id
+        [HttpPost]
+        public void SaveGalleryImages(int id)
+        {
+            foreach (string filename in Request.Files)
+            {
+                HttpPostedFileBase file = Request.Files[filename];
+                if (file != null && file.ContentLength > 0)
+                {
+                    var savePathFull = new DirectoryInfo(String.Format($"{Server.MapPath(@"\")}Images\\Uploads\\Products" +
+                        $"\\{id.ToString()}\\Gallery\\{file.FileName}")).ToString();
+                    var savePathMini = new DirectoryInfo(String.Format($"{Server.MapPath(@"\")}Images\\Uploads\\Products" +
+                        $"\\{id.ToString()}\\Gallery\\Thumbs\\{file.FileName}")).ToString();
+
+                    file.SaveAs(savePathFull);
+                    WebImage image = new WebImage(file.InputStream);
+                    image.Resize(200, 200).Crop(1, 1);
+                    image.Save(savePathMini);
+                }
+            }
+        }
+
+
+        // Post: Admin/Shop/DeleteImage/id/imageName      
+        public void DeleteImage(int id, string imageName)
+        {
+            string fullPath = Request.MapPath("~/Images/Uploads/Products/" + id.ToString() + "/Gallery/" + imageName);
+            string fullPathnMini = Request.MapPath("~/Images/Uploads/Products/" + id.ToString() + "/Gallery/Thumbs/" + imageName);
+
+            if (System.IO.File.Exists(fullPath))
+            {
+                try
+                {
+                    System.IO.File.Delete(fullPath);
+                }
+                catch (Exception ex)
+                {
+                    TempData["AM"] = ex.Message;
+                }
+            }
+            if (System.IO.File.Exists(fullPathnMini))
+            {
+                try
+                {
+                    System.IO.File.Delete(fullPathnMini);
+                }
+                catch (Exception ex)
+                {
+                    TempData["AM"] = ex.Message;
+                }
+            }
+
+        }
+
     }
 }
