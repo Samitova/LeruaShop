@@ -16,6 +16,7 @@ namespace Lerua_Shop.Models.Data.Repository
         private DbStoreContext _context = new DbStoreContext();
 
         private BaseRepository<PageDTO> _pagesRepository;
+        private BaseRepository<SidebarDTO> _sidebarsRepository;
 
         public BaseRepository<PageDTO> PagesRepository
         {
@@ -29,6 +30,20 @@ namespace Lerua_Shop.Models.Data.Repository
                 return _pagesRepository;
             }
         }
+
+        public BaseRepository<SidebarDTO> SidebarsRepository
+        {
+            get
+            {
+
+                if (this._sidebarsRepository == null)
+                {
+                    this._sidebarsRepository = new BaseRepository<SidebarDTO>(_context);
+                }
+                return _sidebarsRepository;
+            }
+        }
+
 
         private GeneralRepository()
         { }

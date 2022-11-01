@@ -136,8 +136,10 @@
     <Compile Include="Models\Data\Repository\GeneralRepository.cs" />
     <Compile Include="Models\Data\Repository\IRepository.cs" />
     <Compile Include="Models\ModelsDTO\PageDTO.cs" />
+    <Compile Include="Models\ModelsDTO\SidebarDTO.cs" />
     <Compile Include="Models\ViewModels\IGetDTO.cs" />
     <Compile Include="Models\ViewModels\Pages\PageVM.cs" />
+    <Compile Include="Models\ViewModels\Pages\SidebarVM.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -194,6 +196,7 @@
     <Content Include="Areas\Admin\Views\Pages\PageDetails.cshtml" />
     <Content Include="Areas\Admin\Views\Pages\EditPage.cshtml" />
     <Content Include="Areas\Admin\Views\Pages\DeletePage.cshtml" />
+    <Content Include="Areas\Admin\Views\Pages\EditSidebar.cshtml" />
     <None Include="Scripts\jquery-3.6.0.intellisense.js" />
     <Content Include="Scripts\ckeditor\ckeditor.php" />
     <Content Include="Scripts\ckeditor\ckeditor_basic.js" />

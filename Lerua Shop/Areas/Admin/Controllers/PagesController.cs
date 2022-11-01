@@ -209,5 +209,53 @@ namespace Lerua_Shop.Areas.Admin.Controllers
             }
         }
 
+        // GET: Admin/Pages/EditSidebar/id
+        [HttpGet]
+        public ActionResult EditSidebar(int id)
+        {
+            SidebarDTO sidebar = _repository.SidebarsRepository.GetOne(id);
+            if (sidebar == null)
+            {
+                return Content("The page does not exist");
+            }
+
+            SidebarVM model = new SidebarVM(sidebar);
+            return View(model);
+        }
+
+        // Post: Admin/Pages/EditSidebar/id
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditSidebar(SidebarVM model)
+        {
+            //Check model
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            //Create SidebarDTO       
+            SidebarDTO sidebar = _repository.SidebarsRepository.GetOne(model.Id);
+
+            try
+            {
+                _repository.SidebarsRepository.Edit(sidebar);
+            }
+            catch (DbUpdateConcurrencyException ex)
+            {
+                ModelState.AddModelError(string.Empty,
+                $@"Unable to save the record. Another admin has updated it.{ex.Message}");
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, $@"Unable to save the record.{ex.Message}");
+                return View(model);
+            }
+            TempData["AM"] = "You have edited the sidebar";
+            return RedirectToAction("EditPage");
+
+        }
+
     }
 }
