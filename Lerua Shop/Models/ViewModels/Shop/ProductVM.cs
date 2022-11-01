@@ -18,13 +18,12 @@ namespace Lerua_Shop.Models.ViewModels.Shop
         {
             Id = product.Id;
             Name = product.Name;
-            Slug = product.Slug;
+            Slug = product.Slug; 
             Description = product.Description;
             Brand = product.Brand;
             CategoryName = product.CategoryName;
             CategoryId = product.CategoryId;
-            Price = product.Price;
-            Avaliability = product.Avaliability;
+            Price = product.Price;            
             Amount = product.Amount;
             ImageName = product.ImageName;
             Timestamp = product.Timestamp;
@@ -35,15 +34,16 @@ namespace Lerua_Shop.Models.ViewModels.Shop
         public string Slug { get; set; }
 
         [Required]
-        public string Description { get; set; }
+        public string Description { get; set; }        
         public string Brand { get; set; }
         public string CategoryName { get; set; }
 
         [Required]
         [DisplayName("Category")]
-        public int CategoryId { get; set; }        
-        public decimal Price { get; set; }        
-        public bool Avaliability { get; set; }        
+        public int CategoryId { get; set; }
+        [Required]
+        public decimal Price { get; set; }
+        [Required]
         public int Amount { get; set; }
 
         [DisplayName("Image")]
@@ -63,8 +63,7 @@ namespace Lerua_Shop.Models.ViewModels.Shop
             product.Brand = this.Brand;
             product.CategoryName = this.CategoryName;
             product.CategoryId = this.CategoryId;
-            product.Price = this.Price;
-            product.Avaliability = this.Avaliability;
+            product.Price = this.Price;            
             product.Amount = this.Amount;
             product.ImageName = this.ImageName;
             product.Timestamp = this.Timestamp;

@@ -16,8 +16,7 @@ namespace Lerua_Shop.Models.ModelsDTO
         public string Brand { get; set; }
         public string CategoryName { get; set; }
         public int CategoryId { get; set; }
-        public decimal Price { get; set; }
-        public bool Avaliability { get; set; }
+        public decimal Price { get; set; }        
         public int Amount { get; set; }
         public string ImageName { get; set; }
 
