@@ -1,4 +1,5 @@
 ﻿$(function () {
+    /************************************************************************************ */
     //// add new category
     var newCatA = $("a#newcata"); /*Class add link*/
     var newCatTextInput = $("#newcatname"); /*class text input*/
@@ -63,4 +64,24 @@
             }
         });
     });
+
+    /*************************************************************************************************************/
+
+    //sorting script
+    $("table#pages tbody").sortable(
+        {
+            items: "tr:not(.home)",
+            placeholder: "ui-state-highlight",
+            update: function () {
+                var ids = $("table#pages tbody").sortable("serialize");
+                var url = "/Admin/Shop/ReorderCategories";
+
+                $.post(url, ids, function (data) {
+                });
+            }
+
+        });
+
+    /**************************************************************************************************************/
+
 });

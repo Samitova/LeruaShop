@@ -26,7 +26,7 @@ namespace Lerua_Shop
                      "~/Scripts/ckeditor/ckeditor.js"));
 
             bundles.Add(new Bundle("~/bundles/jqueryui").Include(
-                     "~/Scripts/ckeditor/jquery-ui.js"));
+                     "~/Scripts/jquery-ui.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",

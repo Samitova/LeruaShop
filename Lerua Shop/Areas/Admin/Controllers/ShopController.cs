@@ -48,5 +48,20 @@ namespace Lerua_Shop.Areas.Admin.Controllers
             return category.Id.ToString();
         }
 
+        // POST: Admin/Shop/ReorderCategories
+        [HttpPost]
+        public void ReorderCategories(int[] id)
+        {
+            int count = 1;
+            CategoryDTO category;
+            foreach (var idCat in id)
+            {
+                category = _repository.CategoriesRepository.GetOne(idCat);
+                category.Sorting = count;
+                _repository.PagesRepository.SaveChanges();
+                count++;
+            }
+        }
+
     }
 }
