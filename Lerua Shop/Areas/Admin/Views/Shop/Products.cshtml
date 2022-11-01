@@ -1,0 +1,104 @@
+﻿@model IEnumerable<Lerua_Shop.Models.ViewModels.Shop.ProductVM>
+@using PagedList.Mvc;
+@using PagedList;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+@{
+    ViewBag.Title = "Products";
+}
+
+<h2>Products</h2>
+<select id="SelectCategory" name="SelectCategory">
+    <option value="0">All</option>
+    @foreach (var item in ViewBag.Categories)
+    {
+        if (ViewBag.SelectedCategory == item.Value)
+        {
+            <option selected="selected" value="@item.Value">@item.Text</option>
+        }
+        else
+        {
+            <option value="@item.Value">@item.Text</option>
+        }
+    }
+</select>
+<br />
+<br />
+<p>
+    @Html.ActionLink("Add New Product", "AddProduct", "", new { @class = "btn btn-success" })
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Description)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Brand)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Price)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Amount)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ImageName)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var product in ViewBag.onePageOfProducts)
+    {
+        <tr>
+            <td>
+                @product.Name
+            </td>
+            <td>
+                @product.Description
+            </td>
+            <td>
+                @product.Brand
+            </td>
+            <td>
+                @product.Price
+            </td>
+
+            <td>
+                @product.Amount
+            </td>
+
+            <td>
+                <a href="/Admin/Views/Shop/EditProduct/@product.Id">
+                    @if (product.ImageName == null)
+                    {
+                        <img src="~/Content/images/no_image.png" />
+                    }
+                    else
+                    {
+                        <img src="/Images/Uploads/Products/@product.Id/Thumbs/@product.ImageName" />
+                    }
+                </a>
+                <br />
+            </td>
+
+            <td>
+                <br />
+                @Html.ActionLink("Edit", "EditProduct", new { id = product.Id }, new { @class = "btn btn-info" })
+                @Html.ActionLink("Delete", "DeleteProduct", new { id = product.Id }, new { @class = "btn btn-danger delete" })
+            </td>
+        </tr>
+
+    }
+
+</table>
+
+@Html.PagedListPager((IPagedList)ViewBag.onePageOfProducts, page => Url.Action("Products", new { page, catId = ViewBag.SelectedCategory }))
+
+@section Scripts
+{
+    <script src="~/Content/ShopScripts/ProductScript.js"></script>
+}
+

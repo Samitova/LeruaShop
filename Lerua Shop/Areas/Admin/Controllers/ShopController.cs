@@ -7,12 +7,17 @@ using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using PagedList;
 
 namespace Lerua_Shop.Areas.Admin.Controllers
 {
     public class ShopController : Controller
     {
         private readonly GeneralRepository _repository = GeneralRepository.GetInstance();
+
+        /**************************************************************************************************/
+        //                                Category functionality                          
+        /**************************************************************************************************/
 
         // GET: Admin/Shop
         [HttpGet]
@@ -112,6 +117,31 @@ namespace Lerua_Shop.Areas.Admin.Controllers
             TempData["AM"] = $"Category was successfuly renamed";
             return "renamed";
         }
+
+
+        /**************************************************************************************************/
+        //                                Product functionality                          
+        /**************************************************************************************************/
+
+        // GET: Admin/Shop/Products
+        [HttpGet]
+        public ActionResult Products(int? page, int? catId)
+        {
+            List<ProductVM> products = _repository.ProductsRepository.GetAll(filter: x => catId == null
+                                        || catId == 0 || x.CategoryId == catId).Select(x => new ProductVM(x)).ToList();
+
+            ViewBag.Categories = new SelectList(_repository.CategoriesRepository.GetAll(), "Id", "Name");
+
+            ViewBag.SelectedCategory = catId.ToString();
+
+            var pageNumber = page ?? 1;
+            var onePageOfProducts = products.ToPagedList(pageNumber, 3);
+            ViewBag.onePageOfProducts = onePageOfProducts;
+
+
+            return View(products);
+        }
+
 
 
     }
