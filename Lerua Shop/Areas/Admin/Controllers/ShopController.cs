@@ -3,6 +3,7 @@ using Lerua_Shop.Models.ModelsDTO;
 using Lerua_Shop.Models.ViewModels.Shop;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -62,6 +63,25 @@ namespace Lerua_Shop.Areas.Admin.Controllers
                 count++;
             }
         }
+
+        // GET: Admin/Shop/DeleteCategory/id        
+        [HttpGet]
+        public ActionResult DeleteCategory(int id)
+        {
+            CategoryDTO category = _repository.CategoriesRepository.GetOne(id);
+            try
+            {
+                _repository.CategoriesRepository.Delete(category);
+            }           
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, $"Unable to delete record:{ex.Message}");
+            }
+
+            TempData["AM"] = $"{category.Name} was successfuly deleted";
+            return RedirectToAction("Categories");
+        }
+
 
     }
 }
