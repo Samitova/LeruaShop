@@ -41,9 +41,9 @@ namespace Lerua_Shop.Models.ViewModels.Shop
 
         [Required]
         [DisplayName("Category")]
-        public int CategoryId { get; set; }
-        public decimal Price { get; set; }
-        public bool Avaliability { get; set; }
+        public int CategoryId { get; set; }        
+        public decimal Price { get; set; }        
+        public bool Avaliability { get; set; }        
         public int Amount { get; set; }
 
         [DisplayName("Image")]

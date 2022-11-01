@@ -242,5 +242,124 @@ namespace Lerua_Shop.Areas.Admin.Controllers
             return RedirectToAction("AddProduct");
         }
 
+        // GET: Admin/Shop/EditProduct/id
+        [HttpGet]
+        public ActionResult EditProduct(int id)
+        {
+            ProductDTO product = _repository.ProductsRepository.GetOne(id);
+
+            if (product == null)
+            {
+                return Content("This product does not exist");
+            }
+
+            ProductVM model = new ProductVM(product);
+
+            // initilize categories
+            model.Categories = new SelectList(_repository.CategoriesRepository.GetAll(),
+                dataValueField: "Id", dataTextField: "Name");
+            // get images
+            model.GaleryImage = Directory.EnumerateFiles(Server.MapPath("~/Images/Uploads/Products/" + id + "/Gallery/Thumbs"))
+                .Select(x => Path.GetFileName(x));
+
+            return View(model);
+        }
+
+        // POST: Admin/Shop/EditProduct/id
+        [HttpPost]
+        public ActionResult EditProduct(ProductVM model, HttpPostedFileBase file)
+        {
+            bool imageExisted = false;
+            model.Categories = new SelectList(_repository.CategoriesRepository.GetAll(),
+               dataValueField: "Id", dataTextField: "Name"); ;
+
+            model.GaleryImage = Directory.EnumerateFiles(Server.MapPath("~/Images/Uploads/Products/" + model.Id + "/Thumbs"))
+               .Select(x => Path.GetFileName(x));
+
+            //check model
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            //check name
+            if (_repository.ProductsRepository.Any(filter: x => x.Id != model.Id && x.Name == model.Name))
+            {
+                ModelState.AddModelError("", "This product name is already existed");
+                return View(model);
+            }
+
+            //check image
+            if (file != null && file.ContentLength > 0)
+            {
+                string ext = file.ContentType.ToLower();
+
+                if (ext != "image/jpg" && ext != "image/jpeg" && ext != "image/pjpeg" &&
+                    ext != "image/gif" && ext != "image/x-png" && ext != "image/png")
+                {
+                    ModelState.AddModelError("", "The image was not uploaded - wrong image extention");
+                    return View(model);
+                }
+                imageExisted = true;
+            }
+
+
+            ProductDTO product = _repository.ProductsRepository.GetOne(model.Id);
+            product = model.GetDTO();
+            product.CategoryName = _repository.CategoriesRepository.GetOne(model.CategoryId)?.Name;
+            if (imageExisted)
+                product.ImageName = file.FileName;
+
+            try
+            {
+                _repository.ProductsRepository.Edit(product);
+            }
+            catch (Exception ex)
+            {
+
+                ModelState.AddModelError(string.Empty, $@"Unable to edit record: {ex.Message}");
+                return View(model);
+            }
+
+            TempData["AM"] = "You have edited the product";
+
+            #region Upload Image
+
+            if (imageExisted)
+            {
+
+                // delete existed image
+                var originalDirectory = new DirectoryInfo(String.Format($"{Server.MapPath(@"\")}Images\\Uploads\\Products\\"));
+
+                List<string> paths = new List<string>
+                {
+                    Path.Combine(originalDirectory.ToString(), model.Id.ToString()),
+                    Path.Combine(originalDirectory.ToString(), model.Id.ToString() + "\\Thumbs")
+                };
+
+                foreach (var path in paths)
+                {
+                    foreach (var imagefile in new DirectoryInfo(path).GetFiles())
+                    {
+                        imagefile.Delete();
+                    }
+                }
+
+                // save image 
+                var savePathFull = string.Format($"{paths[0]}\\{file.FileName}");
+                var savePathMini = string.Format($"{paths[1]}\\{file.FileName}");
+
+                // !! write try/catch
+                file.SaveAs(savePathFull);
+                WebImage image = new WebImage(file.InputStream);
+                image.Resize(200, 200).Crop(1, 1);
+                image.Save(savePathMini);
+
+            }
+            #endregion
+
+            return RedirectToAction("EditProduct");
+        }
+
     }
 }
