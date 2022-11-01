@@ -127,6 +127,7 @@
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
     <Compile Include="Areas\Admin\Controllers\DashboardController.cs" />
     <Compile Include="Areas\Admin\Controllers\PagesController.cs" />
+    <Compile Include="Areas\Admin\Controllers\ShopController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -135,11 +136,13 @@
     <Compile Include="Models\Data\Repository\BaseRepository.cs" />
     <Compile Include="Models\Data\Repository\GeneralRepository.cs" />
     <Compile Include="Models\Data\Repository\IRepository.cs" />
+    <Compile Include="Models\ModelsDTO\CategoryDTO.cs" />
     <Compile Include="Models\ModelsDTO\PageDTO.cs" />
     <Compile Include="Models\ModelsDTO\SidebarDTO.cs" />
     <Compile Include="Models\ViewModels\IGetDTO.cs" />
     <Compile Include="Models\ViewModels\Pages\PageVM.cs" />
     <Compile Include="Models\ViewModels\Pages\SidebarVM.cs" />
+    <Compile Include="Models\ViewModels\Shop\CategoryVM.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -172,7 +175,8 @@
     <Content Include="Content\jquery-ui.css" />
     <Content Include="Content\jquery-ui.structure.css" />
     <Content Include="Content\jquery-ui.theme.css" />
-    <Content Include="Content\ShopScripts\Pages.js" />
+    <Content Include="Content\images\ajax-loader.gif" />
+    <Content Include="Content\ShopScripts\PageScripts.js" />
     <Content Include="favicon.ico" />
     <Content Include="fileman\css\images\animated-overlay.gif" />
     <Content Include="fileman\css\images\ui-bg_flat_0_aaaaaa_40x100.png" />
@@ -493,6 +497,7 @@
     <Content Include="fileman\lang\sk.json" />
     <Content Include="fileman\lang\tr.json" />
     <Content Include="fileman\web.config" />
+    <Content Include="Areas\Admin\Views\Shop\Categories.cshtml" />
     <None Include="Scripts\jquery-3.6.0.intellisense.js" />
     <Content Include="Scripts\ckeditor\ckeditor.php" />
     <Content Include="Scripts\ckeditor\ckeditor_basic.js" />
@@ -863,7 +868,6 @@
   <ItemGroup>
     <Folder Include="Areas\Admin\Data\" />
     <Folder Include="Areas\Admin\Views\Categories\" />
-    <Folder Include="Areas\Admin\Views\Page\" />
     <Folder Include="Areas\Admin\Views\Products\" />
     <Folder Include="Controllers\" />
     <Folder Include="fileman\aspnet_client\system_web\2_0_50727\" />

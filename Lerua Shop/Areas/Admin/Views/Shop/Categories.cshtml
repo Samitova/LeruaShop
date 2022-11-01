@@ -1,0 +1,66 @@
+﻿@model IEnumerable<Lerua_Shop.Models.ViewModels.Shop.CategoryVM>
+
+@{
+    ViewBag.Title = "Categories";
+}
+
+<h2>Categories</h2>
+
+@if (TempData["AM"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["AM"]
+    </div>
+}
+<div class="new-cat">
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-default">Category Name</span>
+        </div>
+        <input type="text" id="newcatname" class="form-control" />
+    </div>
+    <p>
+        <a href="#" id="newcata" class="btn btn-success">Add new category</a>
+        <span class="ajax-text">
+            <img src="~/Content/images/ajax-loader.gif" height="50" />
+        </span>
+    </p>
+</div>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+
+@if (!Model.Any())
+{
+    <h1 class="text-center"> There are no categories</h1>
+}
+else
+{
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Slug)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Sorting)
+                </td>
+                <td>
+                    @Html.ActionLink("Delete", "DeleteCategory", new { id = item.Id }, new { @class = "delete btn btn-danger" })
+                </td>
+            </tr>
+        }
+    </table>
+}

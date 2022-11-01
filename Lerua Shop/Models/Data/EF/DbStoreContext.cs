@@ -11,6 +11,8 @@ namespace Lerua_Shop.Models.Data.EF
     {
         public DbSet<PageDTO> Pages { get; set; }
         public DbSet<SidebarDTO> Sidebars { get; set; }
+        public DbSet<CategoryDTO> Categoris { get; set; }
+
 
         public DbStoreContext() : base("name=DbConnection")
         { }
