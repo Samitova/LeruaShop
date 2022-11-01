@@ -27,7 +27,7 @@ namespace Lerua_Shop.Areas.Admin.Controllers
         [HttpPost]
         public string AddNewCategory(string catName)
         {
-            if (_repository.CategoriesRepository.GetAll(filter: x => x.Name == catName).Count > 0)
+            if (_repository.CategoriesRepository.Any(filter: x => x.Name == catName))
                 return "titletaken";
 
             CategoryDTO category = new CategoryDTO();
@@ -80,6 +80,37 @@ namespace Lerua_Shop.Areas.Admin.Controllers
 
             TempData["AM"] = $"{category.Name} was successfuly deleted";
             return RedirectToAction("Categories");
+        }
+
+        // Post: Admin/Shop/RenameCategory/id
+        [HttpPost]
+        public string RenameCategory(string newCatName, int id)
+        {            
+            if (_repository.CategoriesRepository.Any(x => x.Name == newCatName && x.Id == id))
+                return "noaction";
+
+            if (_repository.CategoriesRepository.Any(x => x.Name == newCatName))
+                return "titletaken";
+
+            CategoryDTO category = _repository.CategoriesRepository.GetOne(id);
+            category.Name = newCatName;
+            category.Slug = newCatName.Replace(" ", "-").ToLower();
+
+            try
+            {
+                _repository.CategoriesRepository.SaveChanges();
+            }
+            catch (DbUpdateConcurrencyException ex)
+            {
+                ModelState.AddModelError(string.Empty, $@"Unable to update. Another admin updated the record. {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, $@"Unable to updete the record:{ex.Message}");
+            }
+
+            TempData["AM"] = $"Category was successfuly renamed";
+            return "renamed";
         }
 
 
