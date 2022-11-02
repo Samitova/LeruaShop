@@ -134,6 +134,7 @@
     <Compile Include="Areas\Admin\Controllers\DashboardController.cs" />
     <Compile Include="Areas\Admin\Controllers\PagesController.cs" />
     <Compile Include="Areas\Admin\Controllers\ShopController.cs" />
+    <Compile Include="Controllers\CartController.cs" />
     <Compile Include="Controllers\PagesController.cs" />
     <Compile Include="Controllers\ShopController.cs" />
     <Compile Include="Global.asax.cs">
@@ -148,6 +149,7 @@
     <Compile Include="Models\ModelsDTO\PageDTO.cs" />
     <Compile Include="Models\ModelsDTO\ProductDTO.cs" />
     <Compile Include="Models\ModelsDTO\SidebarDTO.cs" />
+    <Compile Include="Models\ViewModels\Cart\CartVM.cs" />
     <Compile Include="Models\ViewModels\IGetDTO.cs" />
     <Compile Include="Models\ViewModels\Pages\PageVM.cs" />
     <Compile Include="Models\ViewModels\Pages\SidebarVM.cs" />
@@ -912,6 +914,7 @@
     <Content Include="Views\Shop\_CategoryMenuPartial.cshtml" />
     <Content Include="Views\Shop\Category.cshtml" />
     <Content Include="Views\Shop\ProductDetails.cshtml" />
+    <Content Include="Views\Cart\_CartPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\Admin\Data\" />
