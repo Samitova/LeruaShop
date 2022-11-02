@@ -13,7 +13,9 @@ namespace Lerua_Shop.Models.Data.EF
         public DbSet<SidebarDTO> Sidebars { get; set; }
         public DbSet<CategoryDTO> Categoris { get; set; }
         public DbSet<ProductDTO> Products { get; set; }
-
+        public DbSet<UserDTO> Users { get; set; }
+        public DbSet<RoleDTO> Roles { get; set; }
+        public DbSet<UserRoleDTO> UserRoles { get; set; }
 
         public DbStoreContext() : base("name=DbConnection")
         { }
