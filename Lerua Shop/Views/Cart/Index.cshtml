@@ -1,0 +1,85 @@
+﻿@model IEnumerable<Lerua_Shop.Models.ViewModels.Cart.CartVM>
+
+@{
+    ViewBag.Title = "Cart Details";   
+}
+
+<h2>Cart Details</h2>
+
+@if (ViewBag.Message != null)
+{
+    <h5>@ViewBag.Message</h5>
+}
+else
+{
+    <div class="ajaxbg">
+        <span>
+            <img src="~/Content/images/ajax-loader.gif" hidden="100" , weight="150" />
+        </span>
+    </div>
+
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ProductName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Quantity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Image)
+            </th>
+            <th>
+
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Total)
+            </th>
+            <th>
+
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProductName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Quantity)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)€
+                </td>
+                <td>
+                    <img src="/Images/Uploads/Products/@item.ProductId/Thumbs/@item.Image" />
+                </td>
+                <td>                   
+
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Total)€
+                </td>
+
+            </tr>
+        }
+
+        <tr>
+            <td>    </td>
+            <td>    </td>
+            <td>    </td>
+            <td>    </td>
+            <td>    </td>
+            <td>    </td>
+            <td><b>Grand total: </b> <span>@ViewBag.GrandTotal€</span> </td>
+        </tr>
+
+    </table>    
+    <br />
+    <a href="#" class="placeorder btn btn-primary float-right">Checkout</a>
+}
