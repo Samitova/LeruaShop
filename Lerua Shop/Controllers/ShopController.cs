@@ -3,6 +3,7 @@ using Lerua_Shop.Models.ModelsDTO;
 using Lerua_Shop.Models.ViewModels.Shop;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -43,6 +44,25 @@ namespace Lerua_Shop.Controllers
             ViewBag.CategoryName = category.Name;           
 
             return View(productList);
+        }
+
+        // GET: Shop/product-details/name
+        [ActionName("product-details")]
+        public ActionResult ProductDetails(string name)
+        {           
+            if (!_repository.ProductsRepository.Any( x => x.Slug == name))
+            {
+                return RedirectToAction("Index", "Shop");
+            }
+
+            ProductDTO productDTO = _repository.ProductsRepository.GetOne(x => x.Slug == name);
+            ProductVM model = new ProductVM(productDTO);
+
+            model.GaleryImage = model.GaleryImage = Directory
+                .EnumerateFiles(Server.MapPath("~/Images/Uploads/Products/" + productDTO.Id + "/Gallery/Thumbs"))
+                .Select(x => Path.GetFileName(x));
+
+            return View("ProductDetails", model);
         }
     }
 }
