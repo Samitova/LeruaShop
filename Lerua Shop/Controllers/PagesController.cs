@@ -43,5 +43,13 @@ namespace Lerua_Shop.Controllers
             return View(model);
         }
 
+        // GET: Index/PagesMenuPartial
+        public ActionResult PagesMenuPartial()
+        {
+            List<PageVM> pageList = _repository.PagesRepository.GetAll(filter: x => x.Slug != "home",
+                orderBy: q => q.OrderBy(s => s.Sorting)).Select(x => new PageVM(x)).ToList();
+
+            return PartialView("_PagesMenuPartial", pageList);
+        }
     }
 }

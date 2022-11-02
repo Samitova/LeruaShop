@@ -13,12 +13,16 @@ namespace Lerua_Shop
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
-
+           
             routes.MapRoute("Pages", "{page}", new { controller = "Pages", action = "Index" },
-               new[] { "MVC_Store.Controllers" });
+               new[] { "Lerua_Shop.Controllers" });
 
             routes.MapRoute("Default", "", new { controller = "Pages", action = "Index" },
-               new[] { "MVC_Store.Controllers" });
+               new[] { "Lerua_Shop.Controllers" });
+
+            routes.MapRoute("PagesMenuPartial", "Pages/PagesMenuPartial",
+              new { controller = "Pages", action = "PagesMenuPartial" },
+              new[] { "Lerua_Shop.Controllers" });
         }
     }
 }
