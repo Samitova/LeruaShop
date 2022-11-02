@@ -123,5 +123,15 @@ namespace Lerua_Shop.Controllers
             FormsAuthentication.SignOut();
             return RedirectToAction("Login");
         }
+
+        // GET: Account/UserNavPartial       
+        public ActionResult UserNavPartial()
+        {
+            UserDTO userDTO = _repository.UsersRepository.GetOne(x => x.UserName == User.Identity.Name);
+
+            UserNavPartialVM model = new UserNavPartialVM(userDTO);
+
+            return PartialView("_UserNavPartial", model);
+        }
     }
 }
