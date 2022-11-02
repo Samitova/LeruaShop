@@ -104,5 +104,51 @@ namespace Lerua_Shop.Controllers
             return PartialView("_AddToCartPartial", model);
         }
 
+        // GET: Cart/IncrementProduct       
+        public JsonResult IncrementProduct(int productId)
+        {
+            var cart = Session["cart"] as List<CartVM> ?? new List<CartVM>();
+
+            CartVM model = cart.FirstOrDefault(x => x.ProductId == productId);
+
+            model.Quantity++;
+
+            var result = new { qty = model.Quantity, price = model.Price };
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        // GET: Cart/DecrementProduct       
+        public JsonResult DecrementProduct(int productId)
+        {
+            var cart = Session["cart"] as List<CartVM> ?? new List<CartVM>();
+
+            CartVM model = cart.FirstOrDefault(x => x.ProductId == productId);
+
+            if (model.Quantity > 1)
+            {
+                model.Quantity--;
+            }
+            else
+            {
+                model.Quantity = 0;
+                cart.Remove(model);
+            }
+
+            var result = new { qty = model.Quantity, price = model.Price };
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
+        // GET: Cart/RemoveProduct       
+        public void RemoveProduct(int productId)
+        {
+            var cart = Session["cart"] as List<CartVM>;
+
+            CartVM model = cart.FirstOrDefault(x => x.ProductId == productId);
+
+            cart.Remove(model);
+        }
+
     }
 }

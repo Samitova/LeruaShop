@@ -200,6 +200,7 @@
     <Content Include="Content\jquery.fancybox-thumbs.css" />
     <Content Include="Content\jquery.fancybox.css" />
     <Content Include="Content\PagedList.css" />
+    <Content Include="Content\ShopScripts\CartScripts.js" />
     <Content Include="Content\ShopScripts\CategoryScript.js" />
     <Content Include="Content\ShopScripts\ProductDetailsScript.js" />
     <Content Include="Content\ShopScripts\PageScripts.js" />

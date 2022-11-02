@@ -1,7 +1,8 @@
 ﻿@model IEnumerable<Lerua_Shop.Models.ViewModels.Cart.CartVM>
 
 @{
-    ViewBag.Title = "Cart Details";   
+    ViewBag.Title = "Cart Details";
+    int count = 1;
 }
 
 <h2>Cart Details</h2>
@@ -50,7 +51,7 @@ else
                 <td>
                     @Html.DisplayFor(modelItem => item.ProductName)
                 </td>
-                <td>
+                <td class="qty@(item.ProductId)">
                     @Html.DisplayFor(modelItem => item.Quantity)
                 </td>
                 <td>
@@ -59,10 +60,13 @@ else
                 <td>
                     <img src="/Images/Uploads/Products/@item.ProductId/Thumbs/@item.Image" />
                 </td>
-                <td>                   
+                <td>
+                    <a href="#" class="incproduct" data-id="@item.ProductId">+</a>
+                    <a href="#" class="decproduct" data-id="@item.ProductId">-</a>
+                    <a href="#" class="removeproduct" data-id="@item.ProductId">Remove</a>
 
                 </td>
-                <td>
+                <td class="total@(item.ProductId)">
                     @Html.DisplayFor(modelItem => item.Total)€
                 </td>
 
@@ -76,10 +80,15 @@ else
             <td>    </td>
             <td>    </td>
             <td>    </td>
-            <td><b>Grand total: </b> <span>@ViewBag.GrandTotal€</span> </td>
+            <td class="grandtotal"><b>Grand total: </b> <span>@ViewBag.GrandTotal€</span> </td>
         </tr>
 
-    </table>    
+    </table>  
     <br />
     <a href="#" class="placeorder btn btn-primary float-right">Checkout</a>
+}
+
+@section  Scripts
+{
+    <script src="~/Content/ShopScripts/CartScripts.js"></script>
 }
