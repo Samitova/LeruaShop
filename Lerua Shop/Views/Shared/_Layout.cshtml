@@ -31,7 +31,11 @@
             {
                 <div class="col col-sm-12 col-md-8">
                     @RenderBody()
-                </div>               
+                </div>
+                <div class="col-sm-12 col-md-2">
+
+                    @Html.Action("SidebarPartial", "Pages")
+                </div>
             }
             else
             {

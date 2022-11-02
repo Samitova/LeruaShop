@@ -51,5 +51,14 @@ namespace Lerua_Shop.Controllers
 
             return PartialView("_PagesMenuPartial", pageList);
         }
+
+        // GET: Index/SidebarPartial
+        public ActionResult SidebarPartial()
+        {
+            SidebarDTO sidebarDTO = _repository.SidebarsRepository.GetOne(1);
+
+            SidebarVM model = new SidebarVM(sidebarDTO);
+            return PartialView("_SidebarPartial", model);
+        }
     }
 }
