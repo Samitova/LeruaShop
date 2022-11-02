@@ -133,5 +133,67 @@ namespace Lerua_Shop.Controllers
 
             return PartialView("_UserNavPartial", model);
         }
+
+        // GET: Account/user-profile       
+        [ActionName("user-profile")]
+        [HttpGet]
+        public ActionResult UserProfile()
+        {
+            UserDTO userDTO = _repository.UsersRepository.GetOne(x => x.UserName == User.Identity.Name);
+            UserProfileVM model = new UserProfileVM(userDTO);
+
+            return View("UserProfile", model);
+        }
+
+        // Post: Account/user-profile       
+        [ActionName("user-profile")]
+        [HttpPost]
+        public ActionResult UserProfile(UserProfileVM model)
+        {
+            bool userNameIsChanged = false;
+            if (!ModelState.IsValid)
+            {
+                return View("UserProfile", model);
+            }
+
+            string userName = User.Identity.Name;
+            if (userName != model.UserName)
+            {
+                userNameIsChanged = true;
+                userName = model.UserName;
+            }
+
+            if (_repository.UsersRepository.GetAll(x => x.Id != model.Id).Any(y => y.UserName == userName))
+            {
+                ModelState.AddModelError("", $"Username {User.Identity.Name} is already existed");
+                model.UserName = "";
+                return View("UserProfile", model);
+            }
+
+            UserDTO userDTO = _repository.UsersRepository.GetOne(model.Id);
+            userDTO.FirstName = model.FirstName;
+            userDTO.LastName = model.LastName;
+            userDTO.Email = model.Email;
+            userDTO.Adress = model.Adress;
+            userDTO.UserName = model.UserName;
+            userDTO.TelefonNumber = model.TelefonNumber;
+            if (!string.IsNullOrEmpty(model.Password))
+            {
+                userDTO.Password = model.Password;
+            }
+            _repository.UsersRepository.SaveChanges();
+
+            TempData["AM"] = "You have edited your profile";
+
+            if (!userNameIsChanged)
+            {
+                return View("UserProfile", model);
+            }
+            else
+            {
+                return RedirectToAction("Logout");
+            }
+        }
+
     }
 }
