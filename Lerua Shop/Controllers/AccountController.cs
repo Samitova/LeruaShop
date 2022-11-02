@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Security;
 
 namespace Lerua_Shop.Controllers
 {
@@ -75,5 +76,52 @@ namespace Lerua_Shop.Controllers
             return RedirectToAction("Login");
         }
 
+        // GET: Account/Login  
+        public ActionResult Login()
+        {
+            // check authorization
+            string userNmae = User.Identity.Name;
+            if (!string.IsNullOrEmpty(userNmae))
+            {
+                return RedirectToAction("user-profile");
+            }
+            return View();
+        }
+
+        // POST: Account/Login    
+        [HttpPost]
+        public ActionResult Login(LoginUserVM model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View("Login", model);
+            }
+            // check user
+            bool isValidUser = false;
+
+            if (_repository.UsersRepository.Any(filter: x => x.UserName.Equals(model.Username)
+                && x.Password.Equals(model.Password)))
+            {
+                isValidUser = true;
+            }
+            if (!isValidUser)
+            {
+                ModelState.AddModelError("", "Invalid username or pasword");
+                return View("Login", model);
+            }
+            else
+            {
+                FormsAuthentication.SetAuthCookie(model.Username, model.RememberMe);
+                return Redirect(FormsAuthentication.GetRedirectUrl(model.Username, model.RememberMe));
+            }
+        }
+
+        // GET: Account/Logout
+        [Authorize]
+        public ActionResult Logout()
+        {
+            FormsAuthentication.SignOut();
+            return RedirectToAction("Login");
+        }
     }
 }
