@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Lerua_Shop.Areas.Admin.Models.ViewModels.Shop.OrdersForAdminVM>
+﻿@model IEnumerable<Lerua_Shop.Models.ViewModels.Account.OrdersForUserVM>
 
 @{
     ViewBag.Title = "Orders";
@@ -8,7 +8,7 @@
 
 @if (!Model.Any())
 {
-    <h4 class="text-center">There are no orders</h4>
+    <h4 class="text-center">You have no orders</h4>
 }
 else
 {
@@ -16,9 +16,6 @@ else
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.OrderNumber)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.UserName)
             </th>
             <th>
                 Order Details
@@ -39,10 +36,6 @@ else
                     @Html.DisplayFor(modelItem => item.OrderNumber)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.UserName)
-                </td>
-
-                <td>
                     @foreach (var product in item.ProductsAndQuantity)
                     {
                         @product.Key @: x @product.Value <br />
@@ -51,11 +44,11 @@ else
                 <td>
                     @Html.DisplayFor(modelItem => item.CreatedAt)
                 </td>
-
                 <td>
                     @Html.DisplayFor(modelItem => item.Total)€
                 </td>
             </tr>
         }
+
     </table>
 }

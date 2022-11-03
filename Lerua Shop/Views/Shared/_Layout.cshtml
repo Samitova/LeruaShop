@@ -20,7 +20,7 @@
 
                     @if (Request.IsAuthenticated)
                     {
-                        <li class="navbar-text">@Html.ActionLink("Logout", "Logout", "Account", null, new { @class = "navbar-text", style = "textdecoration:none" }) </li>
+                        <li class="navbar-text">@Html.ActionLink("Logout", "Logout", "Account", null, new { @class = "navbar-text", style = "textdecoration:none" }) &nbsp;</li>
                     }
                     else
                     {
@@ -36,6 +36,8 @@
 
                     @if (Request.IsAuthenticated && User.IsInRole("User"))
                     {
+                        <li class="navbar-text">@Html.ActionLink("My orders", "Orders", "Account", null, new { @class = "navbar-text", style = "textdecoration:none" }) </li>
+
                         if (ViewBag.Title == "User Profile")
                         {
                             <li class="active"> @Html.Action("UserNavPartial", "Account")</li>
@@ -45,7 +47,6 @@
                             <li> @Html.Action("UserNavPartial", "Account")</li>
                         }
                     }
-
                 </ul>
 
                 @if (Request.IsAuthenticated && User.IsInRole("Admin"))

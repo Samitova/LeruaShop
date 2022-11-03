@@ -1,6 +1,7 @@
 ﻿using Lerua_Shop.Models.Data.Repository;
 using Lerua_Shop.Models.ModelsDTO;
 using Lerua_Shop.Models.ViewModels.Account;
+using Lerua_Shop.Models.ViewModels.Shop;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -195,5 +196,45 @@ namespace Lerua_Shop.Controllers
             }
         }
 
+
+        // GET: Account/Orders       
+        [HttpGet]
+        public ActionResult Orders(UserProfileVM model)
+        {
+            List<OrdersForUserVM> ordersForUser = new List<OrdersForUserVM>();
+            UserDTO userDTO = _repository.UsersRepository.GetOne(x => x.UserName == User.Identity.Name);
+
+            int userId = userDTO.Id;
+
+            List<OrderVM> orders = _repository.OrdersRepository.GetAll(filter: x => x.UserId == userId)
+                                   .Select(x => new OrderVM(x)).ToList();
+
+            foreach (var order in orders)
+            {
+
+                Dictionary<string, int> productsAndQuantity = new Dictionary<string, int>();
+                decimal total = 0m;
+                List<OrderDetailsDTO> orderDetailsList = _repository.OrderDetailsRepository
+                                                        .GetAll(filter: x => x.OrderId == order.Id);
+
+                foreach (var orderDetails in orderDetailsList)
+                {
+                    ProductDTO productDTO = _repository.ProductsRepository.GetOne(x => x.Id == orderDetails.ProductId);
+                    decimal price = productDTO.Price;
+                    string productName = productDTO.Name;
+                    productsAndQuantity.Add(productName, orderDetails.Quantity);
+                    total += orderDetails.Quantity * price;
+                }
+
+                ordersForUser.Add(new OrdersForUserVM()
+                {
+                    OrderNumber = order.Id,
+                    Total = total,
+                    ProductsAndQuantity = productsAndQuantity,
+                    CreatedAt = order.CreatedAt
+                });
+            }
+            return View(ordersForUser);
+        }
     }
 }

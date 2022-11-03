@@ -157,6 +157,7 @@
     <Compile Include="Models\ModelsDTO\UserDTO.cs" />
     <Compile Include="Models\ModelsDTO\UserRoleDTO.cs" />
     <Compile Include="Models\ViewModels\Account\LoginUserVM.cs" />
+    <Compile Include="Models\ViewModels\Account\OrdersForUserVM.cs" />
     <Compile Include="Models\ViewModels\Account\UserNavPartialVM.cs" />
     <Compile Include="Models\ViewModels\Account\UserProfileVM.cs" />
     <Compile Include="Models\ViewModels\Account\UserVM.cs" />
@@ -936,6 +937,7 @@
     <Content Include="Views\Account\_UserNavPartial.cshtml" />
     <Content Include="Views\Account\UserProfile.cshtml" />
     <Content Include="Views\Cart\_PaypalPartial.cshtml" />
+    <Content Include="Views\Account\Orders.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\Admin\Data\" />

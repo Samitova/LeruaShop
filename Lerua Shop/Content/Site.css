@@ -111,3 +111,7 @@ input.btn {
     position: absolute;
     left: -2000px;
 }
+
+.navbar-text {
+    text-decoration:none;
+}
