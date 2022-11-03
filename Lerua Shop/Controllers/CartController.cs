@@ -4,6 +4,8 @@ using Lerua_Shop.Models.ViewModels.Cart;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mail;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
 
@@ -148,6 +150,53 @@ namespace Lerua_Shop.Controllers
             CartVM model = cart.FirstOrDefault(x => x.ProductId == productId);
 
             cart.Remove(model);
+        }
+
+        //GET Cart/PaypalPartial
+        public ActionResult PaypalPartial()
+        {
+            List<CartVM> cart = Session["cart"] as List<CartVM>;
+
+            return PartialView("_PaypalPartial", cart);
+        }
+
+        //POST: Cart/PlaceOrder  
+        [HttpPost]
+        public void PlaceOrder()
+        {
+            List<CartVM> cart = Session["cart"] as List<CartVM>;
+            string userName = User.Identity.Name;
+
+            UserDTO userDTO = _repository.UsersRepository.GetOne(x => x.UserName == userName);
+            int userId = userDTO.Id;
+            OrderDTO orderDTO = new OrderDTO()
+            {
+                UserId = userId,
+                CreatedAt = DateTime.Now
+            };
+
+            _repository.OrdersRepository.Add(orderDTO);
+            OrderDetailsDTO orderDetailsDTO = new OrderDetailsDTO();
+
+            foreach (var item in cart)
+            {
+                orderDetailsDTO.OrderId = orderDTO.Id;
+                orderDetailsDTO.ProductId = item.ProductId;
+                orderDetailsDTO.UserId = userId;
+                orderDetailsDTO.Quantity = item.Quantity;
+
+                _repository.OrderDetailsRepository.Add(orderDetailsDTO);
+            }
+            //send e-mail to admin
+            var client = new SmtpClient("smtp.mailtrap.io", 2525)
+            {
+                //Login and password
+                Credentials = new NetworkCredential("34f2a6d0fb2423", "710daf9de4faac"),
+                EnableSsl = true
+            };
+            client.Send("shop@example.com", "admin@example.com", "New Order", $"You have a new order. Order Number: {orderDTO.Id}");
+
+            Session["cart"] = null;
         }
 
     }

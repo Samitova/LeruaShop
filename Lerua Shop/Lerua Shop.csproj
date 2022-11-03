@@ -147,6 +147,8 @@
     <Compile Include="Models\Data\Repository\GeneralRepository.cs" />
     <Compile Include="Models\Data\Repository\IRepository.cs" />
     <Compile Include="Models\ModelsDTO\CategoryDTO.cs" />
+    <Compile Include="Models\ModelsDTO\OrderDetailsDTO.cs" />
+    <Compile Include="Models\ModelsDTO\OrderDTO.cs" />
     <Compile Include="Models\ModelsDTO\PageDTO.cs" />
     <Compile Include="Models\ModelsDTO\ProductDTO.cs" />
     <Compile Include="Models\ModelsDTO\RoleSTO.cs" />
@@ -930,6 +932,7 @@
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Account\_UserNavPartial.cshtml" />
     <Content Include="Views\Account\UserProfile.cshtml" />
+    <Content Include="Views\Cart\_PaypalPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\Admin\Data\" />

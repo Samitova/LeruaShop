@@ -22,6 +22,8 @@ namespace Lerua_Shop.Models.Data.Repository
         private BaseRepository<UserDTO> _usersRepository;
         private BaseRepository<RoleDTO> _rolesRepository;
         private BaseRepository<UserRoleDTO> _userRolesRepository;
+        private BaseRepository<OrderDTO> _ordersRepository;
+        private BaseRepository<OrderDetailsDTO> _orderDetailsRepository;
 
         public BaseRepository<PageDTO> PagesRepository
         {
@@ -111,6 +113,32 @@ namespace Lerua_Shop.Models.Data.Repository
                     this._userRolesRepository = new BaseRepository<UserRoleDTO>(_context);
                 }
                 return _userRolesRepository;
+            }
+        }
+
+        public BaseRepository<OrderDTO> OrdersRepository
+        {
+            get
+            {
+
+                if (this._ordersRepository == null)
+                {
+                    this._ordersRepository = new BaseRepository<OrderDTO>(_context);
+                }
+                return _ordersRepository;
+            }
+        }
+
+        public BaseRepository<OrderDetailsDTO> OrderDetailsRepository
+        {
+            get
+            {
+
+                if (this._orderDetailsRepository == null)
+                {
+                    this._orderDetailsRepository = new BaseRepository<OrderDetailsDTO>(_context);
+                }
+                return _orderDetailsRepository;
             }
         }
 
