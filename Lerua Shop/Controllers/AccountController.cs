@@ -125,7 +125,8 @@ namespace Lerua_Shop.Controllers
             return RedirectToAction("Login");
         }
 
-        // GET: Account/UserNavPartial       
+        // GET: Account/UserNavPartial
+        [Authorize]
         public ActionResult UserNavPartial()
         {
             UserDTO userDTO = _repository.UsersRepository.GetOne(x => x.UserName == User.Identity.Name);
@@ -137,6 +138,7 @@ namespace Lerua_Shop.Controllers
 
         // GET: Account/user-profile       
         [ActionName("user-profile")]
+        [Authorize]
         [HttpGet]
         public ActionResult UserProfile()
         {
@@ -148,6 +150,7 @@ namespace Lerua_Shop.Controllers
 
         // Post: Account/user-profile       
         [ActionName("user-profile")]
+        [Authorize]
         [HttpPost]
         public ActionResult UserProfile(UserProfileVM model)
         {
@@ -199,6 +202,7 @@ namespace Lerua_Shop.Controllers
 
         // GET: Account/Orders       
         [HttpGet]
+        [Authorize(Roles = "User")]
         public ActionResult Orders(UserProfileVM model)
         {
             List<OrdersForUserVM> ordersForUser = new List<OrdersForUserVM>();

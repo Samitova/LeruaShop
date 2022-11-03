@@ -10,7 +10,7 @@ using System.Web.Mvc;
 
 namespace Lerua_Shop.Areas.Admin.Controllers
 {
-    //[Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin")]
     public class PagesController : Controller
     {
         private readonly GeneralRepository _repository = GeneralRepository.GetInstance();

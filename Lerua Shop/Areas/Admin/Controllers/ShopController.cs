@@ -14,6 +14,7 @@ using Lerua_Shop.Areas.Admin.Models.ViewModels.Shop;
 
 namespace Lerua_Shop.Areas.Admin.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class ShopController : Controller
     {
         private readonly GeneralRepository _repository = GeneralRepository.GetInstance();
