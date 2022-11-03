@@ -10,6 +10,7 @@ using System.Web.Mvc;
 using PagedList;
 using System.IO;
 using System.Web.Helpers;
+using Lerua_Shop.Areas.Admin.Models.ViewModels.Shop;
 
 namespace Lerua_Shop.Areas.Admin.Controllers
 {
@@ -445,5 +446,46 @@ namespace Lerua_Shop.Areas.Admin.Controllers
 
         }
 
+        /**************************************************************************************************/
+        //                                Orders for admin functionality                          
+        /**************************************************************************************************/
+
+        // GET: Admin/Shop/Orders
+        [HttpGet]
+        public ActionResult Orders()
+        {
+            List<OrdersForAdminVM> ordersForAdmin = new List<OrdersForAdminVM>();
+            List<OrderVM> orders = _repository.OrdersRepository.GetAll().Select(x => new OrderVM(x)).ToList();
+            foreach (var order in orders)
+            {
+
+                Dictionary<string, int> productsAndQuantity = new Dictionary<string, int>();
+                decimal total = 0m;
+                List<OrderDetailsDTO> orderDetailsList = _repository.OrderDetailsRepository
+                                                        .GetAll(filter: x => x.OrderId == order.Id);
+
+                UserDTO userDTO = _repository.UsersRepository.GetOne(x => x.Id == order.UserId);
+                string userName = userDTO.UserName;
+
+                foreach (var orderDetails in orderDetailsList)
+                {
+                    ProductDTO productDTO = _repository.ProductsRepository.GetOne(x => x.Id == orderDetails.ProductId);
+                    decimal price = productDTO.Price;
+                    string productName = productDTO.Name;
+                    productsAndQuantity.Add(productName, orderDetails.Quantity);
+                    total += orderDetails.Quantity * price;
+                }
+
+                ordersForAdmin.Add(new OrdersForAdminVM()
+                {
+                    OrderNumber = order.Id,
+                    UserName = userName,
+                    Total = total,
+                    ProductsAndQuantity = productsAndQuantity,
+                    CreatedAt = order.CreatedAt
+                });
+            }
+            return View(ordersForAdmin);
+        }
     }
 }
