@@ -211,9 +211,10 @@ namespace Lerua_Shop.Areas.Admin.Controllers
 
         // GET: Admin/Pages/EditSidebar/id
         [HttpGet]
-        public ActionResult EditSidebar(int id)
+        public ActionResult EditSidebar()
         {
-            SidebarDTO sidebar = _repository.SidebarsRepository.GetOne(id);
+            // test
+            SidebarDTO sidebar = _repository.SidebarsRepository.GetOne(1);
             if (sidebar == null)
             {
                 return Content("The page does not exist");
