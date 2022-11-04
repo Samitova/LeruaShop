@@ -80,6 +80,13 @@ div.ajaxmsg {
     display: none;
 }
 
+.ajaxallertmsg td {
+    background: red;
+    color: white;
+    padding: 10px;
+    display: none;
+}
+
 span.loader {
     display: none;
 }
@@ -102,8 +109,8 @@ input.btn {
 
 .ajaxbg span {
     position: absolute;
-    top: 50%;
-    left: 500%;
+    top: 20%;
+    left: 20%;
     transform: translate3d(-50%, -50%, 0);
  }
 
@@ -114,4 +121,9 @@ input.btn {
 
 .navbar-text {
     text-decoration:none;
+}
+
+.placeorder {
+    float: right;
+    margin-right: 8%;
 }
